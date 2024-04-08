@@ -75,11 +75,11 @@ You can check the Help Documentation from here
 2. Browse your workspace path and click 'OK'button
 3. Goto File-> Import-> Existing Maven Projects
 4. Click 'Next' button
-5. Browse for the existing project where CxSolution project is exist
+5. Browse for the existing project where CxA Viewer 2.0 project is exist.
 6. Click 'OK' button
 7. Click 'Finish' button
 
-### Elements of Cx Solution Project:
+### Elements of CxA Viewer 2.0 Project:
 
 | Item      | Description                                  |
 | --------- | -------------------------------------------- |
@@ -90,7 +90,7 @@ You can check the Help Documentation from here
 
 ### dataFile.properties
 
-This `dataFile.properties` file located in the `cx_config` folder is used to parameter the fields such as environment, project, build, browser, homepage url, report path, test type and iteration count for CxSolution to trigger the test and generate the test report. We can change these parameters as needed.
+This `dataFile.properties` file located in the `cx_config` folder is used to parameter the fields such as environment, project, build, browser, homepage url, report path, test type and iteration count for CxA Viewer 2.0 to trigger the test and generate the test report. We can change these parameters as needed.
 
 Below is the format of dataFile.properties file:
 
@@ -124,7 +124,7 @@ iterationCount=`<Numberofperformanceiterations>`
 
 #iterationCount=2 -> to run 2 iterations (maximum it will support 3 iterations)
 
-### Cx Solution Methods
+### CxA Viewer 2.0 Methods
 
 **1.In the setup() method, find the direct urls provided for performance and accessibility validations (you can write the code for the click event as well)**
 
@@ -172,6 +172,6 @@ To provide clarity on what is expected of our members,Cognizant Customer Experie
 
 ## License
 
-Cognizant Customer Experience Assurance Viewer is licensed under Apache License, Version 2.0. Feel free to use, modify, and distribute this software as per the terms of the license.
+Cognizant Customer Experience Assurance Viewer 2.0 is licensed under Apache License, Version 2.0. Feel free to use, modify, and distribute this software as per the terms of the license.
 
 Thank you for your interest in our project! We hope you find the Cognizant CxA Viewer 2.0 valuable for your business needs.
