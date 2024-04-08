@@ -1,0 +1,1099 @@
+package com.test;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.CookieManager;
+import java.net.Inet4Address;
+import java.net.InetSocketAddress;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+import java.net.UnknownHostException;
+import java.text.DateFormat;
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Base64;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Scanner;
+import java.util.Set;
+import java.util.concurrent.TimeUnit;
+
+import org.apache.commons.io.FileUtils;
+import org.json.JSONException;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.PageLoadStrategy;
+import org.openqa.selenium.Proxy;
+import org.openqa.selenium.Proxy.ProxyType;
+import org.openqa.selenium.TakesScreenshot;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxOptions;
+import org.openqa.selenium.firefox.FirefoxProfile;
+import org.openqa.selenium.ie.InternetExplorerDriver;
+import org.openqa.selenium.remote.CapabilityType;
+import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Wait;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import com.axe.runA11y;
+import com.defect.axeparser.Parsing;
+import com.nft.selenium.PerformanceMetrics;
+import com.sun.rowset.internal.Row;
+
+import io.github.bonigarcia.wdm.WebDriverManager;
+import net.lightbody.bmp.BrowserMobProxy;
+import net.lightbody.bmp.BrowserMobProxyServer;
+import net.lightbody.bmp.client.ClientUtil;
+import net.lightbody.bmp.mitm.manager.ImpersonatingMitmManager;
+import net.lightbody.bmp.proxy.CaptureType;
+import net.lightbody.bmp.proxy.ProxyServer;
+import net.lightbody.bmp.proxy.auth.AuthType;
+
+import com.axe.RunAxe;
+import com.cxintegration.elastic.Elastic;
+public class SampleScriptNew {
+              static Properties properties = new Properties();
+              public static WebDriver driver;
+              static PerformanceMetrics collect = new PerformanceMetrics();
+              static String sitevalue = null;
+              static JSONObject browserdata = new JSONObject();
+              static JSONArray output = new JSONArray();
+              static JSONObject harjson = new JSONObject();
+              static JSONArray hararray = new JSONArray();
+              static JSONObject recommendations = new JSONObject();
+              static JSONArray recommendationsarray = new JSONArray();
+              static JSONArray timerarray = new JSONArray();
+              static BrowserMobProxy proxy;
+              static JSONObject timer = new JSONObject();
+              static int counter = 0;
+              static String ENV;
+              static String PROJECT;
+              static String browser;
+              static String BUILD;
+              static String TESTURL;
+              static String reportPath;
+              static String frameworkpath;
+              static String reportFolderPath;
+              
+              static ArrayList<String> filelist = new ArrayList<String>();// for AT
+              static ArrayList<String> pagename = new ArrayList<String>();// for AT
+              static Parsing parse = new Parsing();// for AT
+              static Parsing parseForES;
+              static Proxy seleniumProxy;
+              static String newReportPath;
+              static JSONObject testcaselog;
+              static JSONObject testcaselogFinal;
+              static JSONObject testcasePageSummaryFinal;
+              static JSONArray testcaseArray = new JSONArray();
+              static JSONArray testcaseArrayFinal=new JSONArray();
+              static JSONArray transactionArrayFinal=new JSONArray();
+              static String testCaseName;
+              static int critical=0;
+              static int serious=0;
+              static int moderate=0;
+              static int minor=0;
+              static int physical=0;
+              static int visualimpaired=0;
+              static int deafblind=0;
+              static int cognitive=0;
+              static int hearing=0;
+              
+              static String status = "PASS";
+              static String testType;
+              static int iterationNumber = 0;
+              static int iterationCount;
+              static ArrayList<String> testCaseArrayList = new ArrayList<String>();
+              static HashMap<String, Long> pageAndResponseTime = new HashMap<String, Long>();
+              static HashMap<String, Long> pageAndResponseTimeForEachTestIteration = new HashMap<String, Long>();
+              static HashMap<String, Long> pageSLA = new HashMap<String, Long>();
+              
+              static int trxPerIteration=0;
+              static int failPerIteration=0;
+              static int protocol;
+              
+              static String elasticHost;
+              static String elasticPort;
+              static String authHeader;
+              static String javaCAcertsPath;
+              static String IsElasticSearchRequired;
+              static int RunID=0;
+              static JSONObject reportTimeJSON;
+              static Elastic ES;
+              static String KibanaHost;
+              static String KibanaPort;
+              static String KibanaDashboardPath;
+              static String reportTime;
+              
+              
+              
+
+              public static void main(String[] args) throws Exception {
+                             
+                             String kFromTime = null;
+
+                             Properties properties = new Properties();
+                             properties.load(new FileReader(new File("cx_config\\datafile.properties")));
+                             ENV = properties.getProperty("ENV");
+                             PROJECT = properties.getProperty("PROJECT");
+                             browser = properties.getProperty("browser");
+                             JavascriptExecutor js = null;
+                             BUILD = properties.getProperty("BUILD");
+                             TESTURL = properties.getProperty("URL");
+                             frameworkpath = new File(System.getProperty("user.dir")).getAbsolutePath();
+                            
+                             reportPath = properties.getProperty("ReportPath");
+                             testType=properties.getProperty("testType");
+                iterationCount=Integer.parseInt(properties.getProperty("iterationCount"));
+                             reportPath = frameworkpath + "\\" + reportPath;
+
+                             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss");
+                             LocalDateTime now = LocalDateTime.now();
+                             
+              IsElasticSearchRequired=properties.getProperty("IsElasticSearchRequired");
+                             if(IsElasticSearchRequired.equalsIgnoreCase("yes")==true)
+                             {
+                                           KibanaHost=properties.getProperty("KibanaHost");
+                                           KibanaPort=properties.getProperty("KibanaPort");
+                                  KibanaDashboardPath=properties.getProperty("KibanaDashboardPath");
+                                           
+                                           
+                                           elasticHost = properties.getProperty("elasticHost");
+                                           elasticPort = properties.getProperty("elasticPort");
+                                           authHeader="Basic "+properties.getProperty("authHeader");
+                                           javaCAcertsPath = properties.getProperty("javaCAcertsPath");
+                                 System.setProperty("javax.net.ssl.trustStore", javaCAcertsPath);
+                                 
+                                 
+                                 ES=new Elastic(PROJECT,BUILD,elasticHost,elasticPort,authHeader,javaCAcertsPath,testType);
+                                 RunID=ES.getRunId();
+                                 
+                                 kFromTime=ES.encodedTimeforKibana();
+                                
+                             }
+                             
+                             if(testType.equalsIgnoreCase("pt") == true)
+                             {
+                             reportFolderPath = reportPath + \\PT_cxreport_ + dtf.format(now).toString();
+                             }
+                             else
+                             {
+                                           reportFolderPath = reportPath + \\AT_cxreport_ + dtf.format(now).toString();          
+                             }
+
+                             for (int i = 0; i < iterationCount; i++) {
+
+                                           iterationNumber = i + 1;
+
+                                           if (testType.equalsIgnoreCase("pt") == true) {
+                                                          for (int j = 0; j < 1; j++) {
+                                                                        testCaseName = "SampleTest" + "_" + (j + 1);
+                                                                        testCaseArrayList.add(testCaseName);// only for pt
+
+                                                                        newReportPath = createReportFolder(reportFolderPath, testCaseName);
+                                                                        setup();
+                                                                        testCaseLogGenerate();
+                                                          }
+                                           }
+
+                                           else {
+                                                          testCaseName = "SampleTest" + "_" + (i + 1);
+                                                          newReportPath = createReportFolder(reportFolderPath, testCaseName);
+                                                          setup();
+                                                          testCaseLogGenerate();
+                                           }
+
+                             }
+                             
+                             if (testType.equalsIgnoreCase("pt") == true) {
+                             Set<String> listWithoutDuplicates = new LinkedHashSet<String>(testCaseArrayList);
+                             testCaseArrayList.clear();
+
+                             testCaseArrayList.addAll(listWithoutDuplicates);
+                             setTestCaseVerdict();
+                             
+                             }
+                             
+                             if(IsElasticSearchRequired.equalsIgnoreCase("yes")==true)
+                             {
+                             Thread.sleep(5000);
+                             String kToTime=ES.encodedTimeforKibana();
+                             System.out.println("Kibana Dashboard link for this run id ("+RunID+") is:\n");
+                             String reportPathforRunStatus=KibanaDashboardPath+"?_g=(filters%3A!()%2CrefreshInterval%3A(pause%3A!t%2Cvalue%3A0)%2Ctime%3A(from%3A'"+kFromTime+"'%2Cto%3A'"+kToTime+"'))";
+                             String dashboardURL=KibanaHost+":"+KibanaPort+reportPath;
+                             
+                             
+                             String reportPathforUpdateURL=KibanaDashboardPath+"?_g=(filters%3A!()%2CrefreshInterval%3A(pause%3A!t%2Cvalue%3A0)%2Ctime%3A(from%3A\\\\'"+kFromTime+\\\\'%2Cto%3A\\\\'+kToTime+"\\\\'))";
+                             
+                             DateFormat dateFormat1 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
+        Date date = new Date();
+        String timestampForRunStatus=dateFormat1.format(date);
+              ES.postATRunStatus(timestampForRunStatus,reportTime,reportPathforRunStatus);
+                             ES.updateReportURL(reportPathforUpdateURL);
+                  System.out.println(KibanaHost+":"+KibanaPort+reportPathforRunStatus);
+                             }
+                             System.out.println("Successfully completed!!");
+                             
+
+              }
+
+              
+
+              public static String createReportFolder(String reportFolderPath, String testCase) throws IOException {
+
+                             // create main test report folder
+                             File dir = new File(reportFolderPath);
+                             if (dir.exists()) {
+                                           System.out.println("This folder is already exist in the path " + reportFolderPath);
+
+                             } else {
+                                           dir.mkdir();
+
+                                      
+                             }
+
+                             // create iteration report folder for each testcase
+
+                             dir = new File(reportFolderPath + "\\" + testCase);
+                             if (dir.exists()) {
+                                           System.out.println("This folder is already exist in the path " + reportFolderPath + "\\" + testCase);
+
+                                           File srcDir = null;
+                                           File destDir = null;
+
+                                           if (testType.equalsIgnoreCase("pt") == true) {
+
+                                                          srcDir = new File("cx_report_html_template\\Performance");
+
+                                                          File iterationDirectory = new File(
+                                                                                      reportFolderPath + "\\" + testCase + \\iteration_ + iterationNumber);
+                                                          if (iterationDirectory.exists()) {
+                                                                        System.out.println("This folder is already exist in the path " + reportFolderPath + "\\" + testCase
+                                                                                                     + \\iteration_ + iterationNumber);
+
+                                                          } else {
+                                                                        iterationDirectory.mkdir();
+                                                          }
+s
+                                                          destDir = iterationDirectory;
+
+                                           } else if (testType.equalsIgnoreCase("at") == true) {
+
+                                                          srcDir = new File("cx_report_html_template\\Accessibility");
+                                                          destDir = new File(reportFolderPath + "\\" + testCase);
+
+                                           }
+
+                                           try {
+
+                                                          FileUtils.copyDirectory(srcDir, destDir);
+                                           } catch (IOException e) {
+                                                          e.printStackTrace();
+                                           }
+
+                             } else {
+                                           dir.mkdir();
+
+                                           File srcDir = null;
+                                           File destDir = null;
+
+                                           if (testType.equalsIgnoreCase("pt") == true) {
+
+                                                          srcDir = new File("cx_report_html_template\\Performance");
+
+                                                          File iterationDirectory = new File(
+                                                                                      reportFolderPath + "\\" + testCase + \\iteration_ + iterationNumber);
+                                                          if (iterationDirectory.exists()) {
+                                                                        System.out.println("This folder is already exist in the path " + reportFolderPath + "\\" + testCase
+                                                                                                     + \\iteration_ + iterationNumber);
+
+                                                          } else {
+                                                                        iterationDirectory.mkdir();
+
+                                                                        System.out.println("Created the folder: " + reportFolderPath + "\\" + testCase + \\iteration_
+                                                                                                     + iterationNumber);
+                                                          }
+
+                                                          destDir = iterationDirectory;
+
+                                           } else if (testType.equalsIgnoreCase("at") == true) {
+
+                                                          srcDir = new File("cx_report_html_template\\Accessibility");
+
+                                                          destDir = new File(reportFolderPath + "\\" + testCase);
+
+                                           }
+
+                                           try {
+
+                                                          FileUtils.copyDirectory(srcDir, destDir);
+                                           } catch (IOException e) {
+                                                          e.printStackTrace();
+                                           }
+
+                             }
+
+                             dir = new File(reportFolderPath + "\\" + testCase + \\iteration_ + iterationNumber + \\examples);
+                             if (dir.exists()) {
+                                           System.out.println("This folder is already exist in the path " + reportFolderPath + "\\" + testCase
+                                                                        + \\iteration_ + iterationNumber + \\examples);
+                             } else {
+                                           
+                                           dir.mkdir();
+                                         
+                             }
+
+                             File srcDir = null;
+
+                             if (testType.equalsIgnoreCase("pt") == true) {
+
+                                           srcDir = new File("cx_report_dependencies\\Performance");
+
+                             } else if (testType.equalsIgnoreCase("at") == true) {
+
+                                           srcDir = new File("cx_report_dependencies\\Accessibility");
+
+                             }
+
+
+                             File destDir = new File(reportFolderPath);
+
+                             try {
+
+                                           FileUtils.copyDirectory(srcDir, destDir);
+                             } catch (IOException e) {
+                                           e.printStackTrace();
+                             }
+
+                             srcDir = null;
+
+                             srcDir = new File("cx_report_dependencies\\template");
+
+                             destDir = new File(reportFolderPath + \\template);
+
+                             try {
+
+                                           FileUtils.copyDirectory(srcDir, destDir);
+                             } catch (IOException e) {
+                                           e.printStackTrace();
+                             }
+
+                             String retValue = null;
+                             if (testType.equalsIgnoreCase("at") == true) {
+                                           retValue = reportFolderPath + "\\" + testCase;
+                             } else {
+                                           retValue = reportFolderPath + "\\" + testCase + \\iteration_ + iterationNumber;
+                             }
+
+                             return retValue;
+
+              }
+
+              @SuppressWarnings("deprecation")
+              public static void setup() throws Exception {
+
+                             String chromeDriverPath = "drivers\\chromedriver.exe";
+                             String firefoxDriverPath = "drivers\\geckodriver.exe";
+                             String ieDriverPath = "drivers\\IEDriverServer.exe";
+
+                             if (browser.toLowerCase().contains("chrome") == true) {
+
+                                           System.setProperty("webdriver.chrome.driver", chromeDriverPath);
+
+                             } else if (browser.toLowerCase().contains("firefox") == true) {
+                                           System.setProperty("webdriver.gecko.driver", firefoxDriverPath);
+                             } else if (browser.toLowerCase().contains("internetexplorer") == true) {
+                                           System.setProperty("webdriver.ie.driver", ieDriverPath);
+                             } else {
+                                           System.out.println("Only Chrome/Firfox will work as of now. Please check the browser in the dataFile.properties file");
+                                           System.exit(1);
+
+                             }
+
+                             
+                             proxySetup();
+
+                             // configure it as a desired capability
+                             DesiredCapabilities capabilities = new DesiredCapabilities();
+                             capabilities.setCapability(CapabilityType.PROXY, seleniumProxy);
+                             capabilities.setCapability("acceptInsecureCerts", true);
+                             
+                             
+                            capabilities.setCapability(CapabilityType.ACCEPT_INSECURE_CERTS, true);
+                             
+                             ChromeOptions options=new ChromeOptions();
+                             options.addArguments("start-maximized");
+                             options.setAcceptInsecureCerts(true);
+                             
+                             options.addArguments("--ignore-certificate-errors");
+              
+                             
+                             
+              
+                             options.setPageLoadStrategy(PageLoadStrategy.NORMAL);
+                             options.addArguments("--remote-allow-origins=*");
+                             options.setBinary(new File("C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"));
+                             options.addArguments("--user-data-dir=\\AppData\\Local\\Google\\Chrome\\User Data\\Default");
+                             options.setAcceptInsecureCerts(true);
+                             options.setProxy(seleniumProxy);
+                             
+                             options.setBrowserVersion("stable");
+                             
+                            WebDriverManager.chromedriver().clearDriverCache().setup();
+                            WebDriverManager.chromedriver().clearResolutionCache().setup();
+                             
+                             
+                             System.out.println(seleniumProxy.getHttpProxy());
+                             
+              
+
+                             if (browser.toLowerCase().contains("chrome") == true) {
+
+                                           System.setProperty("webdriver.chrome.driver", chromeDriverPath);
+                                           //driver = new ChromeDriver(capabilities);
+                                           
+                                           
+                                           driver = new ChromeDriver(options);
+                                           
+                             } else if (browser.toLowerCase().contains("firefox") == true) {
+                                           System.setProperty("webdriver.gecko.driver", firefoxDriverPath);
+                                           //driver = new FirefoxDriver(capabilities);
+                                           
+                             } else if (browser.toLowerCase().contains("internetexplorer") == true) {
+                                           System.setProperty("webdriver.ie.driver", ieDriverPath);
+                                           //driver = new InternetExplorerDriver(capabilities);
+                             } else {
+                                           System.out.println("Only Chrome/Firfox will work as of now. Please check the browser in the dataFile.properties file");
+
+                             }
+                             
+                             
+                             
+                             
+                             
+
+                             if (testType.equalsIgnoreCase("pt") == true) {
+                                           collect.clearCache();
+                                           
+
+                                           
+                                           PerformanceExecution(browser, ENV, '', "01_HOMEPAGE",
+                                                                        "null", 5000L);
+                                           
+                                           takeSnap();
+                                           
+                                           
+                                           
+                                           
+
+                                           // Create json
+                                           collect.CreateJson(output, newReportPath);
+                                           collect.CreateHarJson(hararray, newReportPath);
+                                           collect.CreateRecommendationsJSON(recommendationsarray, newReportPath);
+                                           collect.CreateResponseJson(timerarray, newReportPath);
+                                           System.out.println("newReportPath: "+newReportPath);
+                                           collect.CreateOverallSummary(newReportPath);
+
+                                           testCaseDetails(reportFolderPath, testCaseName);
+                                           status = "PASS";
+
+                                           
+
+                             }
+
+                             else {
+
+                                           driver.manage().deleteAllCookies();
+                                           driver.manage().window().maximize();
+
+                                           collect.clearCache();
+                                           
+                                           if(PROJECT.equalsIgnoreCase("")==true)
+                                           {             
+                                           driver.get('');      
+                                           filelist = runA11y.exec(newReportPath, "01_HomePage", driver);
+                                           takeSnap();
+                                           
+                                           
+                                           }
+                                           
+                                           
+                                           
+                                           if(IsElasticSearchRequired.equalsIgnoreCase("yes")==true)
+                                           {
+                                                          //Parsing(int RunID,String testcase)
+                                                          parse=new Parsing(RunID,testCaseName,ES);
+                                                          
+                                           }
+                                           parse.parsingfile(filelist, filelist, newReportPath, IsElasticSearchRequired.toLowerCase().toString());
+                                           //
+                                           
+                                           
+                                           testCaseDetails(reportFolderPath, testCaseName);
+                                           status = "PASS";
+                             }
+
+                             driver.quit();
+                             proxy.stop();
+                             collect.reportTime(newReportPath, browser, driver);
+                             
+                             if (testType.equalsIgnoreCase("at") == true) {
+                             if(IsElasticSearchRequired.equalsIgnoreCase("yes")==true)
+                             {
+                                         reportTimeJSON=collect.reportTimeforElasticSearch(newReportPath, browser, driver,RunID,testCaseName,PROJECT,BUILD);
+                                           JSONObject s=(JSONObject) reportTimeJSON.get("reporttime");
+                                           reportTime=s.get("datetime").toString();
+                                           //System.out.println(reportTime);
+                                           ES.postReportTimetoElastic(reportTimeJSON);
+                                           
+                             }                           
+                             }
+                             
+                             resetMetrics();
+                             
+
+              }
+
+              public static void resetMetrics() {
+                             output.clear();
+                             hararray.clear();
+                             recommendationsarray.clear();
+                             timerarray.clear();
+                             timer.clear();
+                             recommendations.clear();
+                             browserdata.clear();
+                             harjson.clear();
+                             filelist.clear();
+                             pagename.clear();
+                             parse = new Parsing();
+
+                             counter = 0;
+                             critical=0;
+                             serious=0;
+                             moderate=0;
+                             minor=0;
+                             physical=0;
+                             cognitive=0;
+                             visualimpaired=0;
+                             deafblind=0;
+                             hearing=0;
+
+              }
+
+              public static void PerformanceExecution(String browser, String ENV, String TESTURL, String Page,
+                                           String VerificationElement, long SLA) throws Exception {
+                             //System.setProperty("java.net.useSystemProxies", "true");
+                             StartMetrics();
+                             driver.manage().deleteAllCookies();
+                             driver.manage().window().maximize();
+                             
+                             driver.get(TESTURL);
+                             
+                             StopMetrics(driver, proxy, counter, VerificationElement, Page, SLA, newReportPath);
+                             
+
+              }
+
+              public static void StartMetrics() {
+
+                             
+                             counter++;
+                             //System.setProperty("java.net.useSystemProxies", "true");
+                             proxy.newHar(TESTURL);
+                             
+                             collect.startJavaTimer();
+              }
+
+              public static void takeSnap() {
+                             File src = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+                             try {
+                                           FileUtils.copyFile(src, new File(newReportPath + \\test.jpg));
+                             } catch (IOException e) { 
+                                           e.printStackTrace();
+                             }
+              }
+
+              public static void StopMetrics(WebDriver driver, BrowserMobProxy proxy, int counter, String element,
+                                           String pagename, long SLA, String newReportPath) throws InterruptedException, IOException, JSONException {
+                             
+                             
+                             
+              timer = collect.stopJavaTimer(driver, pagename, SLA, testCaseName, iterationNumber);
+                             harjson = collect.CreateHar(proxy, pagename, counter, newReportPath);
+                             recommendations = collect.Recommendations(pagename, newReportPath);
+                             sitevalue = collect.SiteNavigationwithCache(driver, browser, ENV, TESTURL, BUILD, PROJECT, newReportPath);
+                             browserdata = collect.pageTimer(pagename, sitevalue, TESTURL, BUILD, ENV, SLA);
+                             output.add(browserdata);
+                             System.out.println("browser data finished");
+                             hararray.add(harjson);
+                             System.out.println("har json created");
+                             timerarray.add(timer);
+                             recommendationsarray.add(recommendations);
+
+              }
+
+              public static void proxySetup() {
+
+                             proxy = new BrowserMobProxyServer();
+                             
+                             proxy.setTrustAllServers(true);
+              proxy.setMitmManager(ImpersonatingMitmManager.builder().trustAllServers(true).build());
+                             proxy.start(8080);
+
+                             // Assign BrowserMob Proxy to Selenium proxy object
+                             seleniumProxy = ClientUtil.createSeleniumProxy(proxy);
+                             
+                             
+                             
+                             
+                             
+                             
+
+                       proxy.setHarCaptureTypes(CaptureType.getAllContentCaptureTypes());
+                            proxy.enableHarCaptureTypes(CaptureType.REQUEST_CONTENT, CaptureType.RESPONSE_CONTENT,
+                                                          CaptureType.RESPONSE_HEADERS);
+                            //proxy.enableHarCaptureTypes(CaptureType.REQUEST_CONTENT, CaptureType.RESPONSE_CONTENT);
+                             
+
+              }
+
+              public static void testCaseDetails(String reportFolderPath, String testCase) throws IOException {
+
+                             testcaselog = new JSONObject();
+                             
+                             if(testType.equalsIgnoreCase("pt")==true)
+                             {
+                             testcaselog.put("TestCase", testCase);
+                             testcaselog.put("IterationNumber", iterationNumber);
+                             testcaselog.put("PTTestLink",
+                                                          testCase + "\\" + "iteration_" + iterationNumber + "\\" + "Performance_index.html");
+
+                             try {
+
+                                           testcaselog.put("PTstatus", testCasePTStatusValidate());
+                                           testcaselog.put("TotalTRX", trxPerIteration);//added 05/05
+                                           testcaselog.put("TotalFail", failPerIteration);//added 05/05
+                                           trxPerIteration=0;//added 05/05
+                                           failPerIteration=0;//added 05/05
+                             } catch (Exception e) {
+                                           
+                                           e.printStackTrace();
+                             }
+
+                             // testcaselog.put("ATTestLink",reportFolderPath+"\\"+testCase+"\\"+"Accessibility_index.html");
+                             testcaseArray.add(testcaselog);
+
+                             //System.out.println("Test Case " + testcaselog);
+                             //System.out.println("Test Case Array " + testcaseArray.toJSONString());
+                             
+                             }
+                             else
+                             {
+                                           testcaselog.put("TestCase", testCase);
+                                     testcaselog.put("ATTestLink",testCase+"\\"+"Accessibility_index.html");
+                                           try {
+
+                                                          testcaselog.put("ATstatus", testCaseATStatusValidate());
+                                           } catch (Exception e) {
+                                                          
+                                                          e.printStackTrace();
+                                           }
+                                           testcaselog.put("critical", critical);
+                                           testcaselog.put("serious", serious);
+                                           testcaselog.put("moderate", moderate);
+                                           testcaselog.put("minor", minor);
+                                           testcaselog.put("physical", physical);
+                                           testcaselog.put("cognitive", cognitive);
+                                           testcaselog.put("visualimpaired", visualimpaired);
+                                           testcaselog.put("deafblind", deafblind);
+                                           testcaselog.put("hearing", hearing);
+                                           testcaseArray.add(testcaselog);
+
+                                           //System.out.println("Test Case " + testcaselog);
+                                           //System.out.println("Test Case Array " + testcaseArray.toJSONString());
+                             }
+
+              }
+
+              public static void testCaseLogGenerate() throws Exception {
+                             File report = new File(reportFolderPath + \\IterationLog.json);//added 05/05
+
+                             FileWriter reportfile = new FileWriter(report);
+
+                             reportfile.write(testcaseArray.toJSONString());
+
+                             reportfile.flush();
+                             reportfile.close();
+
+              }
+
+              public static String testCasePTStatusValidate() throws Exception {
+                             JSONParser jsonParser = new JSONParser();
+
+                             try (FileReader reader = new FileReader(newReportPath + \\response.json)) {
+                                           // Read JSON file
+                                           Object obj = jsonParser.parse(reader);
+
+                                           JSONArray testCaseList = (JSONArray) obj;
+                                           //System.out.println(testCaseList);
+
+                                           // Iterate over employee array
+                                           testCaseList.forEach(Row -> parseTestCaseObject((JSONObject) Row));
+
+                             } catch (FileNotFoundException e) {
+                                           e.printStackTrace();
+                             } catch (IOException e) {
+                                           e.printStackTrace();
+                             } catch (ParseException e) {
+                                           e.printStackTrace();
+                             }
+                             return status;
+              }
+              
+              public static String testCaseATStatusValidate() throws Exception {
+                             JSONParser jsonParser = new JSONParser();
+
+                             try (FileReader reader = new FileReader(newReportPath + \\donut.json)) {
+                                           // Read JSON file
+                                           
+                                           Object obj = jsonParser.parse(reader);
+                                           //JSONArray testCaseList = (JSONArray) obj;
+                                           //System.out.println(testCaseList);
+                                           
+                                           JSONObject jsonObject = (JSONObject)obj;
+                                           JSONArray testCaseList = (JSONArray)jsonObject.get("rundetails");
+                                           
+
+                                           // Iterate over employee array
+                                           testCaseList.forEach(Row -> parseATTestCaseObject((JSONObject) Row));
+                                           //System.out.println(testCaseList);
+                                           
+                                           if(critical<=0 && serious<=0 && moderate<=0)
+                                           {
+                                                          status="PASS";
+                                           }
+                                           else if(critical>0 || serious>0 || moderate>0)
+                                           {
+                                                          status="FAIL";
+                                           }
+                                           
+
+                             } catch (FileNotFoundException e) {
+                                           e.printStackTrace();
+                             } catch (IOException e) {
+                                           e.printStackTrace();
+                             } catch (ParseException e) {
+                                           e.printStackTrace();
+                             }
+                             return status;
+              }
+
+              public static void parseTestCaseObject(JSONObject Row) {
+                             
+                             
+                             
+
+                             String testCaseObject = Row.get("status").toString();
+
+                             if (testCaseObject.equalsIgnoreCase("FAIL") == true) {
+                                           status = "FAIL";
+                                           failPerIteration++;//added 05/05
+                             }
+                             trxPerIteration++;//added 05/05
+
+              }
+              
+              public static void parseATTestCaseObject(JSONObject Row) {
+                             
+                             
+                             //JSONObject rowObject = (JSONObject) Row.get("rundetails");
+
+                             int tempCritical = Integer.parseInt(Row.get("critical").toString());
+                             int tempSerious = Integer.parseInt(Row.get("serious").toString());
+                             int tempModerate = Integer.parseInt(Row.get("moderate").toString());
+                             int tempMinor = Integer.parseInt(Row.get("minor").toString());
+                             
+                             int tempPhysical = Integer.parseInt(Row.get("physical").toString());
+                             int tempCognitive = Integer.parseInt(Row.get("cognitive").toString());
+                             int tempVisual = Integer.parseInt(Row.get("visual").toString());
+                             int tempDeafBlind = Integer.parseInt(Row.get("deafblind").toString());
+                             int tempHearing = Integer.parseInt(Row.get("hearing").toString());
+                             
+                             critical=critical+tempCritical;
+                             serious=tempSerious+serious;
+                             moderate=moderate+tempModerate;
+                             minor=tempMinor+minor;
+                             
+                             physical=physical+tempPhysical;
+                             cognitive=tempCognitive+cognitive;
+                             visualimpaired=visualimpaired+tempVisual;
+                             deafblind=tempDeafBlind+deafblind;
+                             hearing=tempHearing+hearing;
+                             
+
+              }
+
+              public static void setTestCaseVerdict() throws Exception {
+                             JSONParser jsonParser = new JSONParser();
+                             String content = null;
+                             for (int i = 0; i < testCaseArrayList.size(); i++) {
+
+                                           // System.out.println();
+                                           String testcaseFolder = testCaseArrayList.get(i).toString();
+                                           
+                                           
+                                           
+                                           System.out.println("Test Case Name: "+testcaseFolder);
+                                           
+                                           int j;
+
+                                           for (j = 1; j <= iterationCount; j++) {
+                                                          
+                                                          
+                                                          int iteration=j;
+
+                                                          FileReader reader = new FileReader(
+                                                                                      reportFolderPath + "\\" + testcaseFolder + "\\" + "iteration_" + j + \\response.json);
+
+                                                          // Read JSON file
+                                                          Object obj = jsonParser.parse(reader);
+
+                                                          JSONArray testCaseList = (JSONArray) obj;
+                                                          // System.out.println(testCaseList);
+
+                                                          // Iterate over employee array
+                                                          testCaseList.forEach(Row -> parseTestCaseResponseTime((JSONObject) Row,testcaseFolder,iteration));
+                                                          
+                                                          if(j==1)
+                                                          {
+                                                                        JSONParser jsonParserSLA = new JSONParser();
+                                                                        FileReader SLAreader = new FileReader(
+                                                                                                     reportFolderPath + "\\" + testcaseFolder + "\\" + "iteration_" + j + \\response.json);
+                                                                        Object objSLA = jsonParserSLA.parse(SLAreader);
+
+                                                                        JSONArray pageSLAList = (JSONArray) objSLA;
+                                                                        // System.out.println(testCaseList);
+
+                                                                        // Iterate over employee array
+                                                                        pageSLAList.forEach(Row -> parsePageSLA((JSONObject) Row));
+                                                          }
+                                                          
+                                                          
+                                                          
+
+                                           }
+
+                                           System.out.println("Total Pages in TestCase "+testCaseArrayList.get(i)+" is - "+pageAndResponseTime.size());
+                                           
+                                           testCaseDetailsFinal(testcaseFolder);
+                                           
+                                           pageAndResponseTime.clear();
+                                           pageSLA.clear();
+                             }
+                             
+                             testCaseLogFinal();
+                             transactionLogFinal();
+                             
+              }
+
+              public static void parseTestCaseResponseTime(JSONObject Row,String testcaseFolder,int iteration) {
+                             // Get employee object within list
+                             
+                             testcasePageSummaryFinal = new JSONObject();
+                             testcasePageSummaryFinal.put("TestCase", testcaseFolder);
+                             testcasePageSummaryFinal.put("Iteration", iteration);
+
+                             String pageObject = Row.get("pagename").toString();
+                             Long responeTime = Long.parseLong(Row.get("responsetime").toString());
+                             Long slaforpage=Long.parseLong(Row.get("SLA").toString());
+
+                             if (pageAndResponseTime.isEmpty() == true) {
+                                           pageAndResponseTime.put(pageObject, responeTime);
+                                           
+                             } else {
+
+                                           Long tempResponseTime = 0L;
+                                           
+
+                                           if (pageAndResponseTime.containsKey(pageObject) == true) {
+                                                          tempResponseTime = pageAndResponseTime.get(pageObject);
+                                                          //replace the existing response time with the current response time+existing response time
+                                                         pageAndResponseTime.replace(pageObject, (tempResponseTime + responeTime));
+                                           } else {
+                                                          pageAndResponseTime.put(pageObject, responeTime);
+                                           }             
+
+                             }
+                             
+                             //write response time for each page 
+                             testcasePageSummaryFinal.put("PageName", pageObject);
+                             testcasePageSummaryFinal.put("ResponseTime", responeTime);
+                             testcasePageSummaryFinal.put("SLA", slaforpage);
+                             testcasePageSummaryFinal.put("PageReportLink", testcaseFolder + "\\" + "iteration_" + iteration + \\performance.html?+pageObject);
+                             testcasePageSummaryFinal.put("TestCaseReportLink", testcaseFolder + "\\" + "iteration_" + iteration + \\Performance_index.html);
+                             if(responeTime>slaforpage)
+                             {
+                                           testcasePageSummaryFinal.put("Status", "FAIL");
+                             }
+                             else
+                             {
+                                           testcasePageSummaryFinal.put("Status", "PASS");
+                             }
+                             
+                             transactionArrayFinal.add(testcasePageSummaryFinal);
+
+              }
+              
+              public static void parsePageSLA(JSONObject Row) {
+                             // Get employee object within list
+
+                             String pageObject = Row.get("pagename").toString();
+                             Long SLA = Long.parseLong(Row.get("SLA").toString());
+
+                             if (pageSLA.isEmpty() == true) {
+                                           pageSLA.put(pageObject, SLA);
+                             } else {
+
+                                           Long tempResponseTime = 0L;
+                                           tempResponseTime = pageSLA.get(pageObject);
+
+                                           if (pageSLA.containsKey(pageObject) == true) {
+                                                          System.out.println("Pagename already exist!!");
+                                           } else {
+                                                          pageSLA.put(pageObject, SLA);
+                                           }
+
+                             }
+
+              }
+              
+
+              
+              public static void testCaseLogFinal() throws Exception
+              {
+                             File report = new File(reportFolderPath + \\TestSummaryLog.json);
+        
+        FileWriter reportfile = new FileWriter(report);
+        
+        
+        reportfile.write(testcaseArrayFinal.toJSONString()); 
+                
+        reportfile.flush();
+        reportfile.close();
+        
+        
+              }
+              
+              public static void transactionLogFinal() throws Exception
+              {
+                             File report = new File(reportFolderPath + \\TransactionLog.json);
+        
+        FileWriter reportfile = new FileWriter(report);
+        
+        
+        reportfile.write(transactionArrayFinal.toJSONString()); 
+                
+        reportfile.flush();
+        reportfile.close();
+        
+        
+              }
+              
+              public static void testCaseDetailsFinal(String testCase) throws IOException {
+
+                             testcaselogFinal = new JSONObject();
+                             testcaselogFinal.put("TestCase", testCase);
+                             
+                             
+                             
+                             for(int i=1;i<=iterationCount;i++)
+                             {
+
+                                           testcaselogFinal.put("Iteration_"+i+"_Report", testCase + "\\" + "iteration_" + i + "\\" + "Performance_index.html");
+                             
+                             
+                             }
+                             //int flag=0;
+                             int failCount=0;
+                             int totalPages=0;
+                             
+                             Iterator iteratorSLA = pageSLA.entrySet().iterator();
+                             while (iteratorSLA.hasNext()) 
+                             {
+                                 
+                                           //read SLA for each page from HashMap SLA
+                                           HashMap.Entry mapEntry = (HashMap.Entry) iteratorSLA.next();
+                                 float sla=Float.parseFloat(mapEntry.getValue().toString());
+                                 
+                                 //assign average response time of the each page
+                                 float res=pageAndResponseTime.get(mapEntry.getKey())/iterationCount;
+                                 
+                                 
+                                 
+                                 
+                                 //compare the average response time of the page against SLA
+                                 if(res>sla)
+                                 {
+                                           failCount++;
+                                           
+                                           //break;
+                                 }
+                                 
+                             System.out.println("Pagename: " + mapEntry.getKey() + " SLA: " + mapEntry.getValue());
+                             totalPages++;
+                             
+                             }
+                             
+                             System.out.println("Total Failed Pages:"+failCount);
+                             System.out.println("Total Pages:"+totalPages);
+                             float failureRate=(float)failCount/(float)totalPages;
+                             System.out.println("Total failure percentage is"+(float)failCount/(float)totalPages);
+                             
+                            testcaselogFinal.put("TotalTransactions",totalPages);//added 05/05
+                            testcaselogFinal.put("FailedTransactions",failCount);//added 05/05
+                             
+                             if(((float)failCount/(float)totalPages)>0.2)
+                             {
+                                           
+                                           System.out.println("Total failure % is greater than 0.2");
+                                           testcaselogFinal.put("FailurePercentage", new DecimalFormat("#0.00").format(((float)failCount/(float)totalPages)*100));
+                                           testcaselogFinal.put("Status", "FAIL");
+                             }
+                             else
+                             {
+                                           testcaselogFinal.put("FailurePercentage", new DecimalFormat("#0.00").format(((float)failCount/(float)totalPages)*100));
+                                           testcaselogFinal.put("Status", "PASS");
+                             }
+                             
+                            
+              testcaseArrayFinal.add(testcaselogFinal);
+
+                             
+                             
+
+              }
+
+}
