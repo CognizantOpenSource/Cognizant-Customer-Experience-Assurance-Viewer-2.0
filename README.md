@@ -4,26 +4,24 @@ Cognizant CxA Viewer - 2.0 is an open-source project.
 
 ## About the Project
 
-The Cognizant CxA Viewer 2.0 everages existing functional automation (Selenium) scripts for client-side (page-level) performance evaluation and identify accessibility issues and also provide recommendations to improve end-user experience.
+The Cognizant CxA Viewer 2.0 leverages existing functional automation (Selenium) scripts for client-side (page-level) performance evaluation and identify accessibility issues and also provide recommendations to improve end-user experience.
 
 ## Key Features
 
-- Client Side Evaluation -> Single user client side performance evaluation and profiling
-- WCAG Standard & Guidelines –automated accessibility scan based on WCAG guidelines
-- Can leverage existing Selenium scripts
-- Supports testing with cache/no-cache
-- Supports testing with proxy and non-proxy based applciations
-- Can use json outputs to build html report
-
+- Easy to leverage existing Selenium scripts
+- Automated accessibility scan based on WCAG 2.2 guidelines
+- Support testing with proxy and non-proxy based applciations
+- Support single user client side performance evaluation and profiling
+- Support performance evaluation with cache/no-cache
+- Produce resultant json outputs for accessibility and client side performance evaluation
+  
 ## Benefits
 
-- Identification & resolution of single-user performance issues
-- Client side profiling report with optimization recommendations
-- Kibana or other dashboard can be integreated easily
-- Automated accessibility audits and recommendation to fix violations
-- Integrates seamlessly with a test automation tools like Selenium
-- Integration with CI tools
-- WCAG Standard & Guidelines –automated accessibility scan based on WCAG guidelines
+- Easy to identify accessibility violation and provide recommendation to fix it
+- Client side performance profiling report with optimization recommendations
+- Integrates seamlessly with a Java based selenium framework (i.e. Gradle,TestNg)
+- Easy to integrate with Kibana or other dashboards for reporting
+- Able to integrate with JIRA/CI tools
 
 ## Download
 
