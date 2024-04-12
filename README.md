@@ -13,9 +13,7 @@ The Cognizant CxA Viewer 2.0 everages existing functional automation (Selenium) 
 - Can leverage existing Selenium scripts
 - Supports testing with cache/no-cache
 - Supports testing with proxy and non-proxy based applciations
-- HTML Reporting -> in-built report with HTML view
-- JIRA Integration
-- CI/CD Integration with Jenkins/build tools
+- Can use json outputs to build html report
 
 ## Benefits
 
