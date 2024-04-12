@@ -13,7 +13,7 @@ The Cognizant CxA Viewer 2.0 leverages existing functional automation (Selenium)
 - Support testing with proxy and non-proxy based applciations
 - Support single user client side performance evaluation and profiling
 - Support performance evaluation with cache/no-cache
-- Produce resultant json outputs for accessibility and client side performance evaluation
+- Produce resultant json outputs with recommendations for accessibility and client side performance evaluation
   
 ## Benefits
 
@@ -21,7 +21,6 @@ The Cognizant CxA Viewer 2.0 leverages existing functional automation (Selenium)
 - Client side performance profiling report with optimization recommendations
 - Integrates seamlessly with a Java based selenium framework (i.e. Gradle,TestNg)
 - Easy to integrate with Kibana or other dashboards for reporting
-- Able to integrate with JIRA/CI tools
 
 ## Download
 
